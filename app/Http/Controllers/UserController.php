@@ -104,7 +104,7 @@ class UserController extends Controller
         return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
     }
 
-    // Menampilkan halaman fore edit user 
+    // Menampilkan halaman form edit user 
     public function edit(string $id)
     {
         $user = UserModel::find($id);
