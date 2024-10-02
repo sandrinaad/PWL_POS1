@@ -12,15 +12,17 @@ use App\Http\Controllers\WelcomeController;
 Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [Usercontroller::class, 'index']);          //menmapilkan halaman awal user
-    Route::post('/list', [Usercontroller::class, 'list']);      //menampilkan data user dalam bentuk json untuk datatables
-    Route::get('/create', [Usercontroller::class, 'create']);   //menampilkan halaman form tambah user
-    Route::post('/', [Usercontroller::class, 'store']);         //menyimpan data user baru
-    Route::get('/create_ajax', [Usercontroller::class, 'create_ajax']); //Menampilkan halaman form tambah user Ajax
-    Route::post('/ajax', [Usercontroller::class, 'store_ajax']);        //Menyimpan data user baru Ajax
-    Route::get('/{id}', [Usercontroller::class, 'show']);       //menampilkan detail user
-    Route::get('/{id}/edit', [Usercontroller::class, 'edit']);  //menampilkan halaman form edit user
-    Route::put('/{id}', [Usercontroller::class, 'update']);     //menyimpan perubahan data user
+    Route::get('/', [Usercontroller::class, 'index']);                      //menmapilkan halaman awal user
+    Route::post('/list', [Usercontroller::class, 'list']);                  //menampilkan data user dalam bentuk json untuk datatables
+    Route::get('/create', [Usercontroller::class, 'create']);               //menampilkan halaman form tambah user
+    Route::post('/', [Usercontroller::class, 'store']);                     //menyimpan data user baru
+    Route::get('/create_ajax', [Usercontroller::class, 'create_ajax']);     //Menampilkan halaman form tambah user Ajax
+    Route::post('/ajax', [Usercontroller::class, 'store_ajax']);            //Menyimpan data user baru Ajax
+    Route::get('/{id}', [Usercontroller::class, 'show']);                   //menampilkan detail user
+    Route::get('/{id}/edit', [Usercontroller::class, 'edit']);              //menampilkan halaman form edit user
+    Route::put('/{id}', [Usercontroller::class, 'update']);                 //menyimpan perubahan data user
+    Route::get('/{id}/edit_ajax', [Usercontroller::class, 'edit_ajax']);    // Menampilkan halaman form edit user ajax
+    Route::put('//{id}/update_ajax', [Usercontroller::class, 'update_ajax']); // Menyimpan perubahan data user ajax
     Route::delete('/{id}', [Usercontroller::class, 'destroy']); //menghapus data user
 });
 
