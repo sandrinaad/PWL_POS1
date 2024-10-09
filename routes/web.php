@@ -17,6 +17,17 @@ Route::get('logout', [AuthController::class,'logout'])->middleware('auth');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', [WelcomeController::class, 'index']);
+    //route level
+
+    Route::middleware(['authorize:ADM'])->group(function(){
+        Route::get('/level', [LevelController::class, 'index']);
+        Route::post('/level/list', [LevelController::class, 'list']);
+        Route::get('/level/create', [LevelController::class, 'create']);
+        Route::post('/level', [LevelController::class, 'store']);
+        Route::get('/level/{id}/edit', [LevelController::class, 'edit']);
+        Route::put('/level/{id}', [LevelController::class, 'update']);
+        Route::delete('/level/{id}', [LevelController::class, 'destroy']);
+    });
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [Usercontroller::class, 'index']);                      //menmapilkan halaman awal user
