@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
@@ -8,8 +9,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Usercontroller;
 use App\Http\Controllers\WelcomeController;
 
+Route::pattern('id','[0-9]+'); //artinya apabila ada karakter{id}, maka harus berupa angka
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class,'logout'])->middleware('auth');
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [Usercontroller::class, 'index']);                      //menmapilkan halaman awal user
@@ -94,3 +101,4 @@ Route::group(['prefix' => 'barang'], function () {
     Route::delete('/{id}', [BarangController::class, 'destroy']); // menghapus data barang
 });
 
+});
