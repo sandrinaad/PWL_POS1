@@ -19,7 +19,18 @@ Route::middleware(['auth'])->group(function () { //artinya semua route di dalam 
 //masukkan semua route yang perlu autentikasi di sini
 
 Route::get('/', [WelcomeController::class, 'index']);
+//route level
 
+//artinya semua route didalam group ini harus memiliki role ADM
+Route::middleware(['authorize ADM'])->group(function(){
+    Route::get('/level', [LevelController::class, 'index']);
+    Route::post('/level/list', [LevelController::class, 'list']);
+    Route::get('/level/create', [LevelController::class, 'create']);
+    Route::post('/level', [LevelController::class, 'store']);
+    Route::get('/level/{id}/edit', [LevelController::class, 'edit']);
+    Route::put('/level/{id}', [LevelController::class, 'update']);
+    Route::delete('/level/{id}', [LevelController::class, 'destroy']);
+});
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);          // menampilkan halaman awal user
     Route::post('/list', [UserController::class, 'list']);      // menampilkan data user dalam bentuk json untuk datatables
