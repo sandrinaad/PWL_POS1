@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StokModel;
+
 use App\Models\SupplierModel; // Pastikan ini sesuai dengan nama model yang kamu gunakan
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -22,9 +22,9 @@ class SupplierController extends Controller
         ];
         $activeMenu = 'supplier'; // set menu yang sedang aktif
 
-        $supplier = StokModel::all(); // ambil data supplier untuk filter
+        $supplier = SupplierModel::all(); // ambil data supplier untuk filter
 
-        return view('stok.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
+        return view('supplier.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request)
@@ -52,7 +52,7 @@ class SupplierController extends Controller
         //     ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
         //     ->make(true);
 
-        $supplier = StokModel::select('supplier_id', 'supplier_kode', 'supplier_nama', 'supplier_alamat');
+        $supplier = SupplierModel::select('supplier_id', 'supplier_kode', 'supplier_nama', 'supplier_alamat');
         // Filter data supplier berdasarkan supplier_id
         // if ($request->supplier_id) {
         //     $supplier->where('supplier_id', $request->supplier_id);
@@ -86,7 +86,7 @@ class SupplierController extends Controller
 
     public function create_ajax()
     {
-        return view('stok.create_ajax');
+        return view('supplier.create_ajax');
     }
     // Menyimpan data supplier baru
     public function store(Request $request)
@@ -97,13 +97,13 @@ class SupplierController extends Controller
             'supplier_alamat' => 'nullable|string|max:255' // supplier_alamat opsional
         ]);
 
-        StokModel::create([
+        SupplierModel::create([
             'supplier_kode' => $request->supplier_kode,
             'supplier_nama' => $request->supplier_nama,
             'supplier_alamat' => $request->supplier_alamat,
         ]);
 
-        return redirect('/stok')->with('success', 'Data supplier berhasil disimpan');
+        return redirect('/supplier')->with('success', 'Data supplier berhasil disimpan');
     }
 
     public function store_ajax(Request $request)
@@ -125,7 +125,7 @@ class SupplierController extends Controller
                     'msgField'  => $validator->errors(), // pesan error validasi
                 ]);
             }
-            StokModel::create($request->all());
+            SupplierModel::create($request->all());
             return response()->json([
                 'status'    => true,
                 'message'   => 'Data level berhasil disimpan'
@@ -137,10 +137,10 @@ class SupplierController extends Controller
     // Menampilkan detail supplier
     public function show(string $id)
     {
-        $supplier = StokModel::find($id);
+        $supplier = SupplierModel::find($id);
 
         if (!$supplier) {
-            return redirect('/stok')->with('error', 'Data supplier tidak ditemukan');
+            return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
         }
 
         $breadcrumb = (object) [
@@ -151,16 +151,16 @@ class SupplierController extends Controller
             'title' => 'Detail supplier'
         ];
         $activeMenu = 'stok'; // set menu yang sedang aktif
-        return view('stok.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
+        return view('supplier.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
 
     // Menampilkan halaman form edit supplier
     public function edit(string $id)
     {
-        $supplier = StokModel::find($id);
+        $supplier = SupplierModel::find($id);
 
         if (!$supplier) {
-            return redirect('/stok')->with('error', 'Data supplier tidak ditemukan');
+            return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
         }
 
         $breadcrumb = (object) [
@@ -173,13 +173,13 @@ class SupplierController extends Controller
         ];
 
         $activeMenu = 'supplier'; // set menu yang sedang aktif
-        return view('stok.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
+        return view('supplier.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
 
     public function edit_ajax(string $id)
     {
-        $supplier = StokModel::find($id);
-        return view('stok.edit_ajax', ['supplier' => $supplier]);
+        $supplier = SupplierModel::find($id);
+        return view('supplier.edit_ajax', ['supplier' => $supplier]);
     }
 
     // Menyimpan perubahan data supplier
@@ -191,10 +191,10 @@ class SupplierController extends Controller
             'supplier_alamat' => 'nullable|string|max:255'
         ]);
 
-        $supplier = StokModel::find($id);
+        $supplier = SupplierModel::find($id);
 
         if (!$supplier) {
-            return redirect('/stok')->with('error', 'Data supplier tidak ditemukan');
+            return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
         }
 
         $supplier->update([
@@ -203,7 +203,7 @@ class SupplierController extends Controller
             'supplier_alamat' => $request->supplier_alamat
         ]);
 
-        return redirect('/stok')->with('success', 'Data supplier berhasil diubah');
+        return redirect('/supplier')->with('success', 'Data supplier berhasil diubah');
     }
 
     public function update_ajax(Request $request, $id)
@@ -224,7 +224,7 @@ class SupplierController extends Controller
                     'msgField' => $validator->errors() // menunjukkan field mana yang error
                 ]);
             }
-            $check = StokModel::find($id);
+            $check = SupplierModel::find($id);
             if ($check) {
                 $check->update($request->all());
                 return response()->json([
@@ -243,15 +243,15 @@ class SupplierController extends Controller
 
     public function confirm_ajax(string $id)
     {
-        $supplier = StokModel::find($id);
-        return view('stok.confirm_ajax', ['supplier' => $supplier]);
+        $supplier = SupplierModel::find($id);
+        return view('supplier.confirm_ajax', ['supplier' => $supplier]);
     }
 
     public function delete_ajax(Request $request, $id)
     {
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
-            $supplier = StokModel::find($id);
+            $supplier = SupplierModel::find($id);
             if ($supplier) {
                 $supplier->delete();
                 return response()->json([
@@ -271,17 +271,17 @@ class SupplierController extends Controller
     // Menghapus data supplier
     public function destroy(string $id)
     {
-        $supplier = StokModel::find($id);
+        $supplier = SupplierModel::find($id);
 
         if (!$supplier) {
-            return redirect('/stok')->with('error', 'Data supplier tidak ditemukan');
+            return redirect('/supplier')->with('error', 'Data supplier tidak ditemukan');
         }
 
         try {
             $supplier->delete(); // Hapus data supplier
-            return redirect('/stok')->with('success', 'Data supplier berhasil dihapus');
+            return redirect('/supplier')->with('success', 'Data supplier berhasil dihapus');
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('/stok')->with('error', 'Data supplier gagal dihapus karena masih terkait dengan data lain');
+            return redirect('/supplier')->with('error', 'Data supplier gagal dihapus karena masih terkait dengan data lain');
         }
     }
 }

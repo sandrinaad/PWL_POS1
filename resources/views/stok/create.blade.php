@@ -9,31 +9,62 @@
             <form method="POST" action="{{ url('stok') }}" class="form-horizontal">
                 @csrf
                 <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Kode Supplier</label>
+                    <label class="col-1 control-label col-form-label">Supplier</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="supplier_kode" name="supplier_kode"
-                            value="{{ old('supplier_kode') }}" required>
-                        @error('supplier_kode')
+                        <select class="form-control" id="supplier_id" name="supplier_id" required>
+                            <option value="">- Pilih supplier -</option>
+                            @foreach ($supplier as $item)
+                                <option value="{{ $item->supplier_id }}">{{ $item->supplier_nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('supplier_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Nama Supplier</label>
+                    <label class="col-1 control-label col-form-label">barang</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="supplier_nama" name="supplier_nama"
-                            value="{{ old('supplier_nama') }}" required>
-                        @error('supplier_nama')
+                        <select class="form-control" id="barang_id" name="barang_id" required>
+                            <option value="">- Pilih barang -</option>
+                            @foreach ($barang as $item)
+                                <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('barang_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Alamat Supplier</label>
+                    <label class="col-1 control-label col-form-label">user</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="supplier_alamat" name="supplier_alamat"
-                            value="{{ old('supplier_alamat') }}" required>
-                        @error('supplier_alamat')
+                        <select class="form-control" id="user_id" name="user_id" required>
+                            <option value="">- Pilih user -</option>
+                            @foreach ($user as $item)
+                                <option value="{{ $item->user_id }}">{{ $item->username }}</option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Stok Tanggal</label>
+                    <div class="col-11">
+                        <input type="date" class="form-control" id="stok_tanggal" name="stok_tanggal" value="{{ old('stok_tanggal') }}"
+                            required>
+                        @error('stok_tanggal')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Stok Jumlah</label>
+                    <div class="col-11">
+                        <input type="text" class="form-control" id="stok_jumlah" name="stok_jumlah" required>
+                        @error('stok_jumlah')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -49,9 +80,7 @@
         </div>
     </div>
 @endsection
-
 @push('css')
 @endpush
-
 @push('js')
 @endpush

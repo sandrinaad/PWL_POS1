@@ -14,6 +14,8 @@ Route::pattern('id', '[0-9]+'); //artinya ketika ada parameter (id), maka harus 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'store']);
 Route::middleware(['auth'])->group(function () { //artinya semua route di dalam group ini harus login dulu
 
 //masukkan semua route yang perlu autentikasi di sini
@@ -22,8 +24,8 @@ Route::get('/', [WelcomeController::class, 'index']);
 //route level
 
 //artinya semua route didalam group ini harus memiliki role ADM
-// Route::group(['prefix' => 'level'], function () {
-    Route::middleware(['authorize:ADM'])->group(function(){
+Route::group(['prefix' => 'level', 'middleware' => ['authorize:ADM']], function () {
+    // Route::middleware(['authorize:ADM'])->group(function(){
         Route::get('/', [LevelController::class, 'index']);          // menampilkan halaman awal level
         Route::post('/list', [LevelController::class, 'list']);      // menampilkan data level dalam bentuk json untuk datatables
         Route::get('/create', [LevelController::class, 'create']);   // menampilkan halaman form tambah level
@@ -75,8 +77,8 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
 });
 
 
-// Route::group(['prefix' => 'user'], function () {
-Route::middleware(['authorize:ADM,MNG'])->group(function(){
+ Route::group(['prefix' => 'user', 'middleware' => ['authorize:ADM,MNG']], function () {
+//Route::middleware(['authorize:ADM,MNG'])->group(function(){
     Route::get('/', [UserController::class, 'index']);          // menampilkan halaman awal user
     Route::post('/list', [UserController::class, 'list']);      // menampilkan data user dalam bentuk json untuk datatables
     Route::get('/create', [UserController::class, 'create']);   // menampilkan halaman form tambah user
@@ -94,8 +96,8 @@ Route::middleware(['authorize:ADM,MNG'])->group(function(){
 });
 
 
-// Route::group(['prefix' => 'supplier'], function () {
-Route::middleware(['authorize:ADM,MNG'])->group(function () {
+ Route::group(['prefix' => 'supplier', 'middleware' => ['authorize:ADM,MNG']], function () {
+//Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/', [SupplierController::class, 'index']);          // menampilkan halaman awal supplier
     Route::post('/list', [SupplierController::class, 'list']);      // menampilkan data supplier dalam bentuk json untuk datatables
     Route::get('/create', [SupplierController::class, 'create']);   // menampilkan halaman form tambah supplier

@@ -6,7 +6,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            @empty($stok)
+            @empty($supplier)
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
@@ -15,31 +15,23 @@
                 <table class="table table-bordered table-striped table-hover table-sm">
                     <tr>
                         <th>ID</th>
-                        <td>{{ $stok->stok_id }}</td>
+                        <td>{{ $supplier->supplier_id }}</td>
                     </tr>
                     <tr>
-                        <th>Supplier ID</th>
-                        <td>{{ $stok->supplier->supplier_id }}</td>
+                        <th>Supplier Kode</th>
+                        <td>{{ $supplier->supplier_kode }}</td>
                     </tr>
                     <tr>
-                        <th>Barang ID</th>
-                        <td>{{ $stok->barang->barang_id }}</td>
+                        <th>Nama Supplier</th>
+                        <td>{{ $supplier->supplier_nama }}</td>
                     </tr>
                     <tr>
-                        <th>User ID</th>
-                        <td>{{ $stok->user->user_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Stok Tanggal</th>
-                        <td>{{ $stok->stok_tanggal }}</td>
-                    </tr>
-                    <tr>
-                        <th>stok jumlah</th>
-                        <td>{{ $stok->stok_jumlah }}</td>
+                        <th>Alamat Supplier</th>
+                        <td>{{ $supplier->supplier_alamat }}</td>
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('stok') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+            <a href="{{ url('supplier') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
         </div>
     </div>
 @endsection
