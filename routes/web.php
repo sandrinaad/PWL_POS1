@@ -74,6 +74,8 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
     Route::get('/barang/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
     Route::delete('/barang/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
     Route::delete('/barang/{id}', [BarangController::class, 'destroy']); // menghapus data barang
+    Route::get('/barang/import', [BarangController::class, 'import']); // ajax form upload excel
+    Route::post('/barang/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
 });
 
 
