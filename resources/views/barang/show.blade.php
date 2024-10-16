@@ -34,8 +34,8 @@
                         <td>{{ number_format($barang->harga_jual, 2, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <th>Kode Kategori</th> <!-- Menambahkan baris untuk Kode Kategori -->
-                        <td>{{ $barang->kategori_id }}</td>
+                        <th>Nama Kategori</th> <!-- Menambahkan baris untuk Kode Kategori -->
+                        <td>{{ $barang->kategori->kategori_nama }}</td>
                     </tr>
                 </table>
             @endempty

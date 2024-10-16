@@ -27,7 +27,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>kategori Pengguna</label>
+                            <label>Kategori Pengguna</label>
                             <select name="kategori_id" id="kategori_id" class="form-control" required>
                                 <option value="">- Pilih Kategori -</option>
                                 @foreach ($kategori as $l)
@@ -79,7 +79,7 @@
                         },
                         barang_kode: {
                             required: true,
-                            minlength: 1,
+                            minlength: 3,
                             maxlength: 20
                         },
                         barang_nama: {
