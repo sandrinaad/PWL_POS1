@@ -7,6 +7,7 @@ use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\KategoriModel;
 use Illuminate\Support\Facades\Route;
 
 Route::pattern('id', '[0-9]+'); //artinya ketika ada parameter (id), maka harus berupa angka
@@ -57,10 +58,12 @@ Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/kategori/{id}/edit_ajax', [KategoriController::class, 'edit_ajax']);
     Route::put('/kategori/{id}/update_ajax', [KategoriController::class, 'update_ajax']);
     Route::get('/kategori/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
+    Route::get('/import', [KategoriController::class, 'import']);
+    Route::post('/kategori/import_ajax', [KategoriController::class, 'import'])->name('kategori.import');
     Route::delete('/kategori/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
-    Route::get('/kategori/import', [KategoriController::class, 'import']);
-    Route::post('kategori/import_ajax', [KategoriController::class, 'import_ajax']);
+    Route::get('/kategori/export_excel', [KategoriController::class, 'export_excel']); //export excel
+    Route::get('/kategori/export_pdf', [KategoriController::class, 'export_pdf']); //export pdf
 });
 
 Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {

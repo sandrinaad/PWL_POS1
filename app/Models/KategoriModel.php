@@ -14,6 +14,9 @@ class KategoriModel extends Model
     protected $primaryKey = 'kategori_id'; // Mendefinisikan primary key dari tabel yang digunakan
 
     protected $fillable = ['kategori_kode', 'kategori_nama']; // Mendefinisikan kolom yang dapat diisi secara massal
-
+    public function barang():HasMany
+    {
+        return $this->hasMany(BarangModel::class, 'barang_id', 'barang_id');
+    }
     
 }
