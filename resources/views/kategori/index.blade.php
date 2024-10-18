@@ -4,9 +4,9 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/kategori/import') }}')" class="btn btn-info">Import Data Kategori</button> 
                 <a href="{{ url('/kategori/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Kategori</a> 
                 <a href="{{ url('/kategori/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Kategori</a> 
+                <button onclick="modalAction('{{ url('/kategori/import') }}')" class="btn btn-info">Import Data Kategori</button> 
                 <button onclick="modalAction('{{ url('kategori/create_ajax')}}')" class="btn btn-success mt-1">Tambah Data (Ajax)</button>
             </div>
         </div>
@@ -45,6 +45,7 @@
             </table>
         </div>
     </div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" data-backdrop="static" data-keyboard="false" data-width="75%"></div>
 @endsection
 
 @push('css')
@@ -52,6 +53,11 @@
 
 @push('js')
     <script>
+        function modalAction(url = '') {
+        $('#myModal').load(url, function() {
+            $('#myModal').modal('show');
+        });
+    }
         $(document).ready(function() {
             var dataKategori = $('#table_kategori').DataTable({
                 serverSide: true,

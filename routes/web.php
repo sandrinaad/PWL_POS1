@@ -39,10 +39,12 @@ Route::group(['prefix' => 'level', 'middleware' => ['authorize:ADM']], function 
         Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
         Route::get('/{id}/edit', [LevelController::class, 'edit']);  // menampilkan halaman form edit level
-        Route::put('/{id}', [LevelController::class, 'update']);     // menyimpan perubahan data level
+        Route::get('/level/import', [LevelController::class, 'import']); //ajax form upload excel
+        Route::post('/level/import_ajax', [LevelController::class, 'import_ajax']); //ajax form upload excel
         Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
-        Route::get('/level/import', [LevelController::class, 'import']);
-        Route::post('/level/import_ajax', [LevelController::class, 'import_ajax']);
+        Route::get('/level/export_excel', [LevelController::class, 'export_excel']); //export excel
+        Route::get('/level/export_pdf', [LevelController::class, 'export_pdf']); //export excel
+        Route::put('/{id}', [LevelController::class, 'update']);     // menyimpan perubahan data level
     });
 
 Route::middleware(['authorize:ADM,MNG'])->group(function () {
@@ -58,12 +60,12 @@ Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::get('/kategori/{id}/edit_ajax', [KategoriController::class, 'edit_ajax']);
     Route::put('/kategori/{id}/update_ajax', [KategoriController::class, 'update_ajax']);
     Route::get('/kategori/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
-    Route::get('/import', [KategoriController::class, 'import']);
-    Route::post('/kategori/import_ajax', [KategoriController::class, 'import'])->name('kategori.import');
+    Route::get('/kategori/import', [KategoriController::class, 'import']);
+    Route::post('/kategori/import_ajax', [KategoriController::class, 'import_ajax']);
     Route::delete('/kategori/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
-    Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
     Route::get('/kategori/export_excel', [KategoriController::class, 'export_excel']); //export excel
     Route::get('/kategori/export_pdf', [KategoriController::class, 'export_pdf']); //export pdf
+    Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
 });
 
 Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {

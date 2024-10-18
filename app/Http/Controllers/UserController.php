@@ -21,7 +21,7 @@ class UserController extends Controller
             'list' => ['Home', 'User']
         ];
         $page = (object) [
-            'title' => 'Daftar user yang terdaftar dalam sistem'
+            'title' => ''
         ];
         $activeMenu = 'user'; // set menu yang sedang aktif
 
