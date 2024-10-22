@@ -277,6 +277,20 @@ class UserController extends Controller
     return redirect('/');
     }
 
+    public function show_ajax(string $id)
+    {
+        $user = UserModel::with('level')->find($id);
+
+        if(!$user){
+            return response()-> json([
+                'status' => false,
+                'messege' => 'data level tidak ditemukan'
+            ]);
+        }
+
+        return view('user.show_ajax', ['user' => $user]);
+    }
+
     public function import() 
     { 
         return view('user.import'); 
