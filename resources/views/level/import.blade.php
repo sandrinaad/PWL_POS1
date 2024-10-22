@@ -29,7 +29,6 @@
         </div>
     </div>
 </form>
-
 <script>
     $(document).ready(function() {
         $("#form-import").validate({
@@ -41,7 +40,7 @@
             },
             submitHandler: function(form) {
                 var formData = new FormData(form); // Jadikan form ke FormData untuk menghandle file
-                
+
                 $.ajax({
                     url: form.action,
                     type: form.method,
