@@ -26,6 +26,10 @@ Route::middleware(['auth'])->group(function () { //artinya semua route di dalam 
 Route::get('/', [WelcomeController::class, 'index']);
 //route level
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile'); // Tambahkan ini
+});
+
 //artinya semua route didalam group ini harus memiliki role ADM
 Route::middleware(['authorize:ADM'])->group(function(){ //semua route harus punya role adm baru bisa akses
     Route::get('/level', [LevelController::class, 'index']); //menampilkan halaman awal leevel
