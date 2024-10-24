@@ -1,4 +1,4 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah" enctype="multipart/form-data">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -29,8 +29,13 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form-control" required>
+                    <input value="" type="password" name="password" id="password" class="formcontrol" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Foto Profil</label>
+                    <input type="file" name="avatar" id="avatar" class="formcontrol">
+                    <small id="error-avatar" class="error-text form-text textdanger"></small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -40,6 +45,7 @@
         </div>
     </div>
 </form>
+
 <script>
     $(document).ready(function() {
         $("#form-tambah").validate({
@@ -60,39 +66,61 @@
                 },
                 password: {
                     required: true,
-                    minlength: 6,
+                    minlength: 5,
                     maxlength: 20
+                },
+                avatar: {
+                    extension: "jpg|jpeg|png"
                 }
             },
             submitHandler: function(form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: $(form).serialize(),
-                    success: function(response) {
-                        if (response.status) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: response.message
-                            });
-                            dataUser.ajax.reload();
-                        } else {
-                            $('.error-text').text('');
-                            $.each(response.msgField, function(prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message
-                            });
-                        }
+            var formData = new FormData(form); // Gunakan FormData untuk file upload
+
+            $.ajax({
+                url: form.action,
+                type: form.method,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status) {
+                        // Menampilkan notifikasi berhasil
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        }).then(function() {
+                            // Reload halaman atau update data setelah Swal ditutup
+                            if (typeof dataUser !== 'undefined') {
+                                dataUser.ajax.reload(); // Reload data table jika ada
+                            } else {
+                                location.reload(); // Reload halaman jika tidak ada dataUser
+                            }
+                        });
+                    } else {
+                        // Menampilkan error dari validasi field
+                        $('.error-text').text('');
+                        $.each(response.msgField, function(prefix, val) {
+                            $('#error-' + prefix).text(val[0]);
+                        });
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: response.message
+                        });
                     }
-                });
-                return false;
-            },
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan. Silakan coba lagi nanti.'
+                    });
+                }
+            });
+            return false;
+        },
             errorElement: 'span',
             errorPlacement: function(error, element) {
                 error.addClass('invalid-feedback');

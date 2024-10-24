@@ -12,15 +12,16 @@
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang anda cari tidak ditemukan
                 </div>
-                <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ url('/profil') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ url('/user/' . $user->user_id.'/update_ajax') }}" method="POST" id="form-edit-{{ $user->user_id }}" enctype="multipart/form-data">
+    <form action="{{ url('/profil/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit"
+        enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <div id="modal-master-{{ $user->user_id }}" class="modal-dialog modal-lg" role="document">
+        <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
@@ -31,28 +32,34 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Ubah Foto Profil</label><br>
-                        <img id="current-avatar-{{ $user->user_id }}" src="{{ asset('gambar/' . $user->avatar) }}" class="img-avatar mb-2" alt="Foto Profil Saat Ini" style="width: 100px; height: 100px; object-fit: cover;"><br>
-                        <input type="file" name="avatar" id="avatar-{{ $user->user_id }}" class="form-control" accept="image/*">
-                        <small id="error-avatar-{{ $user->user_id }}" class="error-text form-text text-danger"></small>
+                        <!-- Foto profil yang akan diubah langsung -->
+                        <img id="current-avatar" src="{{ asset('gambar/' . $user->avatar) }}" class="img-avatar mb-2"
+                            alt="Foto Profil Saat Ini" style="width: 100px; height: 100px; object-fit: cover;"><br>
+                        <input type="file" name="avatar" id="avatar" value="{{ $user->avatar }}" class="form-control"
+                            accept="image/*">
+                        <small id="error-avatar" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Level Pengguna</label>
                         <select name="level_id" id="level_id" class="form-control" required>
                             <option value="">- Pilih Level -</option>
-                            @foreach($level as $l)
-                                <option {{ ($l->level_id == $user->level_id)? 'selected' : '' }} value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                            @foreach ($level as $l)
+                                <option {{ $l->level_id == $user->level_id ? 'selected' : '' }}
+                                    value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
                             @endforeach
                         </select>
                         <small id="error-level_id" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Username</label>
-                        <input value="{{ $user->username }}" type="text" name="username" id="username" class="form-control" required>
+                        <input value="{{ $user->username }}" type="text" name="username" id="username"
+                            class="form-control" required>
                         <small id="error-username" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Nama</label>
-                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control" required>
+                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control"
+                            required>
                         <small id="error-nama" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
@@ -69,19 +76,18 @@
             </div>
         </div>
     </form>
+    @push('js')
     <script>
         $(document).ready(function() {
-            // Mengganti foto profil hanya untuk pengguna yang sesuai
-            $("#avatar-{{ $user->user_id }}").change(function() {
-                const userId = "{{ $user->user_id }}"; // ID pengguna saat ini
+            // Mengganti foto profil langsung ketika memilih file baru
+            $("#avatar").change(function() {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#current-avatar-' + userId).attr('src', e.target.result); // Ganti src gambar profil saat ini
+                    $('#current-avatar').attr('src', e.target.result); // Mengganti src gambar profil saat ini
                 }
                 reader.readAsDataURL(this.files[0]);
             });
-
-            $("#form-edit-{{ $user->user_id }}").validate({
+            $("#form-edit").validate({
                 rules: {
                     level_id: {
                         required: true,
@@ -107,7 +113,6 @@
                 },
                 submitHandler: function(form) {
                     var formData = new FormData(form); // Gunakan FormData untuk file upload
-
                     $.ajax({
                         url: form.action,
                         type: form.method,
@@ -124,9 +129,11 @@
                                 }).then(function() {
                                     // Reload halaman atau update data setelah Swal ditutup
                                     if (typeof dataUser !== 'undefined') {
-                                        dataUser.ajax.reload(); // Reload data table jika ada
+                                        dataUser.ajax
+                                    .reload(); // Reload data table jika ada
                                     } else {
-                                        location.reload(); // Reload halaman jika tidak ada dataUser
+                                        location
+                                    .reload(); // Reload halaman jika tidak ada dataUser
                                     }
                                 });
                             } else {
@@ -135,7 +142,6 @@
                                 $.each(response.msgField, function(prefix, val) {
                                     $('#error-' + prefix).text(val[0]);
                                 });
-
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Terjadi Kesalahan',
@@ -167,4 +173,5 @@
             });
         });
     </script>
+@endpush
 @endempty
