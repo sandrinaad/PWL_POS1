@@ -91,6 +91,7 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
     Route::put('/barang/{id}', [BarangController::class, 'update']);     // menyimpan perubahan data barang
     Route::get('/barang/{id}/edit_ajax', [BarangController::class, 'edit_ajax']);
     Route::put('/barang/{id}/update_ajax', [BarangController::class, 'update_ajax']);
+    Route::get('/barang/{id}/show_ajax', [BarangController::class, 'show_ajax']); 
     Route::get('/barang/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
     Route::delete('/barang/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
     Route::delete('/barang/{id}', [BarangController::class, 'destroy']); // menghapus data barang
