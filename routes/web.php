@@ -65,6 +65,7 @@ Route::middleware(['authorize:ADM,MNG'])->group(function () {
     Route::post('/kategori/ajax', [KategoriController::class, 'store_ajax']);
     Route::post('/kategori', [KategoriController::class, 'store']);         // menyimpan data kategori baru
     Route::get('/kategori/{id}', [KategoriController::class, 'show']);       // menampilkan detail kategori
+    Route::get('/kategori/{id}/show_ajax', [KategoriController::class, 'show_ajax']); 
     Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit']);  // menampilkan halaman form edit kategori
     Route::put('/kategori/{id}', [KategoriController::class, 'update']);     // menyimpan perubahan data kategori
     Route::get('/kategori/{id}/edit_ajax', [KategoriController::class, 'edit_ajax']);
