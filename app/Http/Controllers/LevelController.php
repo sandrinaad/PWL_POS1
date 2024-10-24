@@ -190,6 +190,8 @@ class LevelController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect('/level')->with('error', 'Data level gagal dihapus karena masih terkait dengan data lain');
         }
+
+        return redirect('/');
     }
 
     public function create_ajax()
