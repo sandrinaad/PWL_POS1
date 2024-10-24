@@ -1,7 +1,9 @@
 <?php
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\DetailModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 class PenjualanModel extends Model
@@ -16,6 +18,6 @@ class PenjualanModel extends Model
     }
     public function detail():HasMany
     {
-        return $this->hasMany(DetailModel::class, 'detail_id','detail_id');
+        return $this->hasMany(DetailModel::class, 'penjualan_id','penjualan_id');
     }
 }

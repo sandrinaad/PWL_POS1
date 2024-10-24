@@ -176,7 +176,7 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::get('/export_excel', [PenjualanController::class, 'export_excel']); // export excel
         Route::get('/export_pdf', [PenjualanController::class, 'export_pdf']); // export pdf
         Route::get('/{id}', [PenjualanController::class, 'show']);       // menampilkan detail stok
-        Route::get('/stok/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);
+        Route::get('/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);
         Route::get('/{id}/edit', [PenjualanController::class, 'edit']);  // menampilkan halaman form edit stok
         Route::put('/{id}', [PenjualanController::class, 'update']);     // menyimpan perubahan data stok
         Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);
