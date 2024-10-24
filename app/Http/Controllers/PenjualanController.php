@@ -146,12 +146,61 @@ class PenjualanController extends Controller
             ]);
         }
     }
-    public function edit_ajax(string $id)
-    {
-        $penjualan = PenjualanModel::find($id);
-        $user = UserModel::select('user_id', 'username')->get();
-        return view('penjualan.edit_ajax', ['penjualan' => $penjualan, 'user' => $user]);
+    public function edit_ajax($penjualan_id)
+{
+    try {
+        // Mulai dengan mencari penjualan berdasarkan ID, menggunakan eager loading untuk relasi barang
+        $penjualan = PenjualanModel::with('barang_penjualan.barang')->find($penjualan_id);
+
+        // Jika data tidak ditemukan
+        if (!$penjualan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data penjualan tidak ditemukan.'
+            ], 404);
+        }
+
+        // Ambil data user untuk dropdown pilihan
+        $user = UserModel::all();
+
+        // Siapkan response data dengan data penjualan dan barang
+        $response = [
+            'penjualan' => [
+                'penjualan_id' => $penjualan->penjualan_id,
+                'pembeli' => $penjualan->pembeli,
+                'penjualan_kode' => $penjualan->penjualan_kode,
+                'penjualan_tanggal' => $penjualan->penjualan_tanggal->format('Y-m-d'),
+                'user_id' => $penjualan->user_id,
+            ],
+            'barang_penjualan' => $penjualan->barang_penjualan->map(function ($item) {
+                return [
+                    'barang_id' => $item->barang_id,
+                    'nama_barang' => $item->barang->nama_barang,
+                    'harga' => $item->harga,
+                    'jumlah' => $item->jumlah
+                ];
+            }),
+            'user' => $user->map(function ($u) {
+                return [
+                    'user_id' => $u->user_id,
+                    'username' => $u->username
+                ];
+            })
+        ];
+
+        // Kirim response dalam format JSON untuk ditangani oleh frontend
+        return response()->json(['status' => true, 'data' => $response]);
+
+    } catch (\Exception $e) {
+
+        // Jika ada error, kirim response gagal
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan server. Coba lagi nanti.'
+        ], 500);
     }
+}
+
     public function update_ajax(Request $request, $penjualan_id)
     {
         // Validasi data input
