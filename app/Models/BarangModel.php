@@ -24,4 +24,9 @@ class BarangModel extends Model
     {
         return $this->hasMany(BarangModel::class, 'barang_id', 'barang_id');
     }
+    public function barang_penjualan()
+{
+    return $this->hasMany(PenjualanModel::class, 'penjualan_id', 'penjualan_id');
+}
+
 }

@@ -20,4 +20,10 @@ class PenjualanModel extends Model
     {
         return $this->hasMany(DetailModel::class, 'penjualan_id','penjualan_id');
     }
+    public function barang()
+    {
+        return $this->belongsTo(BarangModel::class, 'barang_id', 'barang_id');
+    }
+
+
 }

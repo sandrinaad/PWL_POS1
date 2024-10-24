@@ -83,12 +83,35 @@
 </div>
 
 <!-- Menambahkan Menu Logout -->
+<!-- Menambahkan Menu Logout dengan SweetAlert2 -->
 <li class="nav-item">
-  <a href="{{ url('logout') }}" class="nav-link"
-      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <a href="{{ url('logout') }}" class="nav-link" onclick="confirmLogout(event)">
       <i class="nav-icon fas fa-sign-out-alt"></i>
       <p>Logout</p>
-  </a>
-  <form id="logout-form" action="{{ url('logout') }}" method="GET" style="display: none;">
-  </form>
-</li>
+    </a>
+    <form id="logout-form" action="{{ url('logout') }}" method="GET" style="display: none;">
+    </form>
+  </li>
+  
+  <script>
+    function confirmLogout(event) {
+      event.preventDefault(); // Menghentikan aksi default logout
+  
+      Swal.fire({
+        title: 'Anda yakin ingin logout?',
+        text: "Anda akan keluar dari sesi ini.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Logout!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Jika pengguna mengklik "Ya, Logout", submit form logout
+          document.getElementById('logout-form').submit();
+        }
+      })
+    }
+  </script>
+  
