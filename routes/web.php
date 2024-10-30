@@ -17,9 +17,9 @@ Route::pattern('id', '[0-9]+'); //artinya ketika ada parameter (id), maka harus 
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('register',[AuthController::class,'register'])->name('register');
+Route::post('/register',[AuthController::class,'store']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
-Route::get('register', [AuthController::class, 'register']);
-Route::post('register', [AuthController::class, 'store']);
 Route::middleware(['auth'])->group(function () { //artinya semua route di dalam group ini harus login dulu
 
 //masukkan semua route yang perlu autentikasi di sini
@@ -99,6 +99,7 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
     Route::post('/barang/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
     Route::get('/barang/export_excel', [BarangController::class, 'export_excel']); //export excel
     Route::get('/barang/export_pdf', [BarangController::class, 'export_pdf']); //export pdf
+    Route::post('/barang/harga', [BarangController::class, 'getHargaBarang']);
 });
 
 
@@ -109,7 +110,7 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
     Route::get('/create', [UserController::class, 'create']);   // menampilkan halaman form tambah user
     Route::post('/', [UserController::class, 'store']);         // menyimpan data user baru
     Route::get('/create_ajax', [UserController::class, 'create_ajax']);   // menampilkan halaman form tambah user via Ajax
-    Route::post('/user/ajax', [UserController::class, 'store_ajax']);         // menyimpan data user via Ajax
+    Route::post('/ajax', [UserController::class, 'store_ajax']);         // menyimpan data user via Ajax
     Route::get('/{id}', [UserController::class, 'show']);       // menampilkan detail user
     Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);       // menampilkan detail user
     Route::get('/user/{id}/edit', [UserController::class, 'edit']);  // menampilkan halaman form edit user

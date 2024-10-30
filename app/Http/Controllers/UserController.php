@@ -391,39 +391,58 @@ class UserController extends Controller
             ->with('level', $level);
     }
 
-    public function store_ajax(Request $request) {
-        // Validasi
-        $request->validate([
-            'level_id' => 'required|integer',
-            'username' => 'required|string|min:3|max:20|unique:users',
-            'nama' => 'required|string|min:3|max:100',
-            'password' => 'required|string|min:5|max:20',
-            'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|string|min:3|unique:m_user,username',
+                'nama' => 'required|string|max:100',
+                'password' => 'required|min:5',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ];
     
-        // Proses file upload jika ada
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar')->store('avatars', 'public');
-        } else {
-            $avatar = null;
+            // Validator untuk validasi input
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+    
+            // Simpan data user tanpa avatar dulu agar ID terbuat
+            $user = UserModel::create([
+                'level_id' => $request->level_id,
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password),
+                'avatar' => 'profil-pic.png', // Default avatar sementara
+            ]);
+    
+            // Jika avatar ada, proses penyimpanan gambar
+            if ($request->hasFile('avatar')) {
+                // Gunakan ID user yang baru dibuat untuk nama file
+                $fileName = 'profile_' . $user->user_id . '.' . $request->avatar->getClientOriginalExtension();
+    
+                // Simpan gambar di direktori 'gambar'
+                $request->avatar->move(public_path('gambar'), $fileName);
+    
+                // Update user dengan nama file avatar baru
+                $user->avatar = $fileName;
+                $user->save(); // Simpan perubahan ke database
+            }
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Data User berhasil disimpan',
+            ]);
         }
     
-        // Simpan user ke database
-        UserModel::create([
-            'level_id' => $request->level_id,
-            'username' => $request->username,
-            'nama' => $request->nama,
-            'password' => bcrypt($request->password),
-            'profile_picture' => $avatar,
-        ]);
-    
-        // Kirim response sukses
-        return response()->json([
-            'status' => true,
-            'message' => 'Data berhasil disimpan',
-        ]);
+        return redirect('/');
     }
-    
 
     public function edit_ajax(string $id)
     {

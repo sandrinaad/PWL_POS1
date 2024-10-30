@@ -75,25 +75,27 @@
             </td>
         </tr>
     </table>
-    <h3 class="text-center">LAPORAN DATA DETAIL PENJUALAN</h4>
+    <h3 class="text-center">LAPORAN DATA PENJUALAN</h4>
         <table class="border-all">
             <thead>
                 <tr>
                     <th class="text-center">No</th>
-                    <th>Penjualan ID</th>
-                    <th>Nama Barang</th>
-                    <th>Harga</th>
-                    <th class="text-right">Jumlah</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Kode Penjualan</th>
+                    <th>Pembeli</th>
+                    <th class="text-right">Tanggal Penjualan</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($detail as $b)
+                @foreach ($penjualan as $b)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $b->penjualan->penjualan_id }}</td>
-                        <td>{{ $b->barang->barang_nama }}</td>
-                        <td>{{ $b->harga }}</td>
-                        <td class="text-right">{{ $b->jumlah }}</td>
+                        <td>{{ $b->user->user_id }}</td>
+                        <td>{{ $b->user->username }}</td>
+                        <td>{{ $b->penjualan_kode }}</td>
+                        <td>{{ $b->pembeli }}</td>
+                        <td class="text-right">{{ $b->penjualan_tanggal }}</td>
                     </tr>
                 @endforeach
             </tbody>

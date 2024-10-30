@@ -60,13 +60,13 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ url('/supplier') }}" class="nav-link {{ $activeMenu == 'stok' ? 'active' : '' }}">
+              <a href="{{ url('/supplier') }}" class="nav-link {{ $activeMenu == 'supplier' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-cubes"></i>
                   <p>Supplier</p>
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{ url('/stok') }}" class="nav-link {{ $activeMenu == 'stokBarang' ? 'active' : '' }}">
+              <a href="{{ url('/stok') }}" class="nav-link {{ $activeMenu == 'stok' ? 'active' : '' }}">
                   <i class="nav-icon fas fa-box"></i>
                   <p>Stok Barang</p>
               </a>
@@ -86,7 +86,7 @@
 <!-- Menambahkan Menu Logout dengan SweetAlert2 -->
 <li class="nav-item">
     <a href="{{ url('logout') }}" class="nav-link" onclick="confirmLogout(event)">
-      <i class="nav-icon fas fa-sign-out-alt"></i>
+      <i class="nav-icon fas fa-power-off"></i>
       <p>Logout</p>
     </a>
     <form id="logout-form" action="{{ url('logout') }}" method="GET" style="display: none;">

@@ -108,7 +108,7 @@
                         maxlength: 20
                     },
                     avatar: {
-                        extension: "jpg|jpeg|png"
+                        extension: "jpg|jpeg|png|JPG"
                     }
                 },
                 submitHandler: function(form) {

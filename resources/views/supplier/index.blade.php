@@ -104,9 +104,9 @@
                     }
                 ]
             });
-            // $('#supplier_id').on('change', function(){
-            //     dataSupplier.ajax.reload();
-            // });
+            $('#supplier_id').on('change', function(){
+                dataSupplier.ajax.reload();
+            });
         });
     </script>
 @endpush

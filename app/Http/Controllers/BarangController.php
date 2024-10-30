@@ -110,6 +110,15 @@ class BarangController extends Controller
         return redirect('/');
     }
 
+    public function getHargaBarang(Request $request)
+    {
+        $barang = BarangModel::find($request->barang_id);
+        if ($barang) {
+            return response()->json(['status' => true, 'harga' => $barang->harga_jual]);
+        }
+        return response()->json(['status' => false, 'message' => 'Barang tidak ditemukan']);
+    }
+
     public function edit_ajax($id)
     {
         $barang = BarangModel::find($id);

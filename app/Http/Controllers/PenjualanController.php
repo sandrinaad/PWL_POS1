@@ -93,6 +93,7 @@ class PenjualanController extends Controller
         $barang = BarangModel::all();
         return view('penjualan.create_ajax', ['penjualan' => $penjualan, 'user' => $user, 'barang' => $barang]);
     }
+    
     public function store_ajax(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -145,131 +146,52 @@ class PenjualanController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+        return response()->json($penjualan);
     }
-    public function edit_ajax($penjualan_id)
-{
-    try {
-        // Mulai dengan mencari penjualan berdasarkan ID, menggunakan eager loading untuk relasi barang
-        $penjualan = PenjualanModel::with('barang_penjualan.barang')->find($penjualan_id);
-
-        // Jika data tidak ditemukan
-        if (!$penjualan) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data penjualan tidak ditemukan.'
-            ], 404);
-        }
-
-        // Ambil data user untuk dropdown pilihan
-        $user = UserModel::all();
-
-        // Siapkan response data dengan data penjualan dan barang
-        $response = [
-            'penjualan' => [
-                'penjualan_id' => $penjualan->penjualan_id,
-                'pembeli' => $penjualan->pembeli,
-                'penjualan_kode' => $penjualan->penjualan_kode,
-                'penjualan_tanggal' => $penjualan->penjualan_tanggal->format('Y-m-d'),
-                'user_id' => $penjualan->user_id,
-            ],
-            'barang_penjualan' => $penjualan->barang_penjualan->map(function ($item) {
-                return [
-                    'barang_id' => $item->barang_id,
-                    'nama_barang' => $item->barang->nama_barang,
-                    'harga' => $item->harga,
-                    'jumlah' => $item->jumlah
-                ];
-            }),
-            'user' => $user->map(function ($u) {
-                return [
-                    'user_id' => $u->user_id,
-                    'username' => $u->username
-                ];
-            })
-        ];
-
-        // Kirim response dalam format JSON untuk ditangani oleh frontend
-        return response()->json(['status' => true, 'data' => $response]);
-
-    } catch (\Exception $e) {
-
-        // Jika ada error, kirim response gagal
-        return response()->json([
-            'status' => false,
-            'message' => 'Terjadi kesalahan server. Coba lagi nanti.'
-        ], 500);
-    }
-}
-
-    public function update_ajax(Request $request, $penjualan_id)
+    public function edit_ajax(string $id)
     {
-        // Validasi data input
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|integer',
-            'pembeli' => 'required|string|min:3',
-            'penjualan_kode' => 'nullable|string|min:3',
-            'penjualan_tanggal' => 'required|date',
-            'barang_id.*' => 'required|integer|exists:barang,barang_id',
-            'jumlah.*' => 'required|integer|min:1',
-            'harga.*' => 'required|numeric|min:0'
-        ]);
-    
-        // Cek apakah validasi gagal
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi gagal!',
-                'msgField' => $validator->errors()
-            ]);
-        }
-    
-        try {
-            // Ambil data penjualan berdasarkan ID
-            $penjualan = PenjualanModel::findOrFail($penjualan_id);
-    
-            // Update data penjualan
-            $penjualan->user_id = $request->user_id;
-            $penjualan->pembeli = $request->pembeli;
-            $penjualan->penjualan_kode = $request->penjualan_kode;
-            $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
-            $penjualan->save();
-    
-            // Update atau tambahkan data barang yang dibeli
-            $barangData = [];
-            foreach ($request->barang_id as $key => $barang_id) {
-                $jumlah = $request->jumlah[$key];
-                $harga = $request->harga[$key];
-                $totalHarga = $jumlah * $harga;
-    
-                // Simpan data barang ke array
-                $barangData[] = [
-                    'barang_id' => $barang_id,
-                    'jumlah' => $jumlah,
-                    'harga_satuan' => $harga,
-                    'harga_total' => $totalHarga,
-                ];
-            }
-    
-            // Hapus barang penjualan yang lama
-            $penjualan->barangPenjualan()->delete();
-    
-            // Simpan data barang baru
-            $penjualan->barangPenjualan()->createMany($barangData);
-    
-            // Return response sukses
-            return response()->json([
-                'status' => true,
-                'message' => 'Data penjualan berhasil diperbarui!'
-            ]);
-        } catch (\Exception $e) {
-            // Return response error
-            return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan saat memperbarui data penjualan: ' . $e->getMessage()
-            ]);
-        }
+        $penjualan = PenjualanModel::find($id);
+        $user = UserModel::select('user_id', 'username')->get();
+        return view('penjualan.edit_ajax', ['penjualan' => $penjualan, 'user' => $user]);
     }
-    
+    public function update_ajax(Request $request, $id)
+    {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'user_id'           => 'required|integer',
+                'pembeli'           => 'required|string|min:3|max:100',
+                'penjualan_kode'    => 'nullable|string|min:3|unique:t_penjualan,penjualan_kode',
+                'penjualan_tanggal' => 'required|date'
+            ];
+            // use Illuminate\Support\Facades\Validator;
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, // respon json, true: berhasil, false: gagal
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // menunjukkan field mana yang error
+                ]);
+            }
+            $check = PenjualanModel::find($id);
+            if ($check) {
+                if (!$request->filled('penjualan_kode')) {
+                    $request->request->remove('penjualan_kode');
+                }
+                $check->update($request->all());
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
     public function confirm_ajax(string $penjualan_id)
     {
         // Mencari data penjualan berdasarkan ID
@@ -333,8 +255,6 @@ class PenjualanController extends Controller
                 ]);
             }
         }
-    
-        // Jika bukan request AJAX, redirect ke halaman utama
         return redirect('/');
     }
     public function import()
