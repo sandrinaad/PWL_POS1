@@ -102,15 +102,7 @@
                         <td class="text-right">{{ $b->penjualan_tanggal }}</td>
                     </tr>
                 @endforeach
-                {{-- @foreach ($detail as $d)
-                    <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $d->penjualan->penjualan_id }}</td>
-                        <td>{{ $d->barang->barang_nama }}</td>
-                        <td>{{ $d->harga }}</td>
-                        <td class="text-right">{{ $d->jumlah }}</td>
-                    </tr>
-                @endforeach --}}
+              
             </tbody>
         </table>
 </body>
