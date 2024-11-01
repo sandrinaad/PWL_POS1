@@ -77,9 +77,9 @@
             <tr>
                 <th class="text-center">No</th>
                 <th>ID Stok</th>
-                <th>ID Supplier</th>
-                <th>ID Barang</th>
-                <th>ID User</th>
+                <th>Nama Supplier</th>
+                <th>Nama Barang</th>
+                <th>User</th>
                 <th>Tanggal Stok</th>
                 <th>Jumlah Stok</th>
             </tr>
@@ -89,9 +89,9 @@
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
                 <td>{{ $u->stok_id }}</td>
-                <td>{{ $u->supplier->supplier_id }}</td>
-                <td>{{ $u->barang->barang_id }}</td>
-                <td>{{ $u->user->user_id }}</td>
+                <td>{{ $u->supplier->supplier_nama }}</td>
+                <td>{{ $u->barang->barang_nama}}</td>
+                <td>{{ $u->user->username }}</td>
                 <td>{{ $u->stok_tanggal }}</td>
                 <td>{{ $u->stok_jumlah }}</td>
             </tr>
